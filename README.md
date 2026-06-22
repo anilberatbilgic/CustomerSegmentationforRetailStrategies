@@ -1,32 +1,31 @@
 # 🛍️ Customer Segmentation for Retail Strategies
 
-Segmenting retail customers with RFM analysis and unsupervised clustering to drive targeted marketing strategies.
+Turning **500K+ online-retail transactions** into named customer segments with RFM scoring and unsupervised clustering.
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue.svg)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-Clustering-orange.svg)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-KMeans%20%7C%20DBSCAN-orange.svg)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626.svg)
 
 **🌐 Language:** English · [Türkçe](#-türkçe)
 
 ## 📈 Overview
 
-Not all customers are equal. This project groups customers by their purchasing behavior so a retailer can tailor campaigns — rewarding loyal high-spenders, re-engaging those who are slipping away, and nurturing newcomers.
+A UK online gift shop wants to treat customers differently based on **how recently, how often, and how much** they buy. This project builds those segments two complementary ways — rule-based **RFM scoring** and unsupervised **clustering** — so marketing can target each group.
 
 ## 📊 Dataset
 
-**Online Retail** transactional data (`OnlineRetail.csv`) — invoices, dates, quantities, prices and customer IDs from an online store.
+**Online Retail** (`OnlineRetail.csv`) — real transactions from a UK-based online retailer (2010–2011): `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`, `UnitPrice`, `CustomerID`, `Country`. Rows without a `CustomerID` are dropped and only customers with positive spend are kept.
 
 ## 🧠 Approach
 
-1. **Cleaning** — drop rows without a `CustomerID`, parse invoice dates.
-2. **RFM feature engineering** — compute **Recency** (days since last purchase), **Frequency** (number of orders) and **Monetary** (total spend) per customer.
-3. **Scaling** — standardize features with `StandardScaler`.
-4. **Clustering** — apply and compare **K-Means** and **DBSCAN**.
-5. **Evaluation & viz** — assess cluster quality with the **silhouette score**; reduce to 2D with **PCA** for visualization.
+1. **RFM engineering** — per customer: **Recency** (days since last order, relative to a snapshot date), **Frequency** (unique invoices), **Monetary** (total spend = Quantity × UnitPrice).
+2. **RFM scoring** — each dimension bucketed into **1–5 quintiles** with `qcut`.
+3. **Rule-based segments** — regular expressions on the RFM score map customers to named segments: **Champions, Loyal Customers, Potential Loyalists, New Customers, At Risk, Cannot Lose Them, Lost**.
+4. **Clustering** — `StandardScaler` + **K-Means** and **DBSCAN**; cluster quality judged by the **silhouette score**, and **PCA** projects the clusters to 2D for visualization.
 
 ## 🛠️ Tech Stack
 
-`Python` · `pandas` · `numpy` · `scikit-learn` (KMeans, DBSCAN, PCA, silhouette) · `matplotlib` · `seaborn`
+`Python` · `pandas` · `numpy` · `scikit-learn` (KMeans, DBSCAN, PCA, silhouette_score) · `matplotlib` · `seaborn`
 
 ## ▶️ How to Run
 
@@ -35,7 +34,7 @@ pip install pandas numpy scikit-learn matplotlib seaborn
 jupyter notebook CustomerSegmentationforRetailStrategies.ipynb
 ```
 
-Update the `OnlineRetail.csv` path at the top of the notebook, then run all cells.
+Set the `OnlineRetail.csv` path near the top of the notebook, then run all cells.
 
 ---
 
@@ -43,17 +42,16 @@ Update the `OnlineRetail.csv` path at the top of the notebook, then run all cell
 ## 🇹🇷 Türkçe
 
 ### Genel Bakış
-Her müşteri aynı değildir. Bu proje, müşterileri satın alma davranışlarına göre gruplayarak perakendecinin kampanyalarını kişiselleştirmesini sağlar — sadık yüksek harcayanları ödüllendirmek, uzaklaşanları geri kazanmak ve yeni gelenleri büyütmek.
+İngiltere merkezli bir çevrimiçi hediyelik mağaza, müşterilerini **ne kadar yakın zamanda, ne sıklıkta ve ne kadar** alışveriş yaptıklarına göre farklı ele almak ister. Bu proje bu segmentleri iki tamamlayıcı yolla kurar — kural tabanlı **RFM skorlaması** ve gözetimsiz **kümeleme**.
 
 ### Veri Seti
-**Online Retail** işlem verisi (`OnlineRetail.csv`) — bir çevrimiçi mağazaya ait faturalar, tarihler, miktarlar, fiyatlar ve müşteri kimlikleri.
+**Online Retail** (`OnlineRetail.csv`) — İngiltere merkezli bir perakendecinin gerçek işlemleri (2010–2011): `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`, `UnitPrice`, `CustomerID`, `Country`. `CustomerID` olmayan satırlar atılır, yalnızca pozitif harcamalı müşteriler tutulur.
 
 ### Yaklaşım
-1. **Temizlik** — `CustomerID` olmayan satırları at, fatura tarihlerini ayrıştır.
-2. **RFM öznitelikleri** — müşteri başına **Recency** (son alışverişten bu yana geçen gün), **Frequency** (sipariş sayısı) ve **Monetary** (toplam harcama).
-3. **Ölçekleme** — `StandardScaler` ile standartlaştırma.
-4. **Kümeleme** — **K-Means** ve **DBSCAN** uygulanıp karşılaştırılır.
-5. **Değerlendirme & görselleştirme** — küme kalitesi **silhouette skoru** ile ölçülür; **PCA** ile 2B'ye indirgenip görselleştirilir.
+1. **RFM öznitelikleri** — müşteri başına **Recency** (anlık tarihe göre son siparişten geçen gün), **Frequency** (benzersiz fatura sayısı), **Monetary** (toplam harcama = Quantity × UnitPrice).
+2. **RFM skorlama** — her boyut `qcut` ile **1–5 beşli dilime** ayrılır.
+3. **Kural tabanlı segmentler** — RFM skoruna uygulanan düzenli ifadelerle müşteriler isimli segmentlere atanır: **Champions, Loyal Customers, Potential Loyalists, New Customers, At Risk, Cannot Lose Them, Lost**.
+4. **Kümeleme** — `StandardScaler` + **K-Means** ve **DBSCAN**; küme kalitesi **silhouette skoru** ile ölçülür, **PCA** ile kümeler 2B'ye yansıtılıp görselleştirilir.
 
 ### Teknolojiler
 `Python` · `pandas` · `numpy` · `scikit-learn` · `matplotlib` · `seaborn`
@@ -63,4 +61,4 @@ Her müşteri aynı değildir. Bu proje, müşterileri satın alma davranışlar
 pip install pandas numpy scikit-learn matplotlib seaborn
 jupyter notebook CustomerSegmentationforRetailStrategies.ipynb
 ```
-Notebook'un başındaki `OnlineRetail.csv` yolunu güncelle ve tüm hücreleri çalıştır.
+Notebook'un başındaki `OnlineRetail.csv` yolunu ayarla ve tüm hücreleri çalıştır.
